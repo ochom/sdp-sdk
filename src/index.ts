@@ -1,7 +1,6 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
 import swaggerUi from "swagger-ui-express";
-import { Request, Response, NextFunction } from "express";
 import { handleBulk, handlePremium } from "./handlers/sms";
 import {
   handleActivateSubscription,
