@@ -1,0 +1,32 @@
+name: Testing
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.Js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Error Check
+        run: npm run lint-prod
+
+      - name: Test
+        run: npm test
