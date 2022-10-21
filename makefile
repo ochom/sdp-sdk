@@ -1,12 +1,13 @@
 # Makefile
 
-SHELL := /bin/bash
-
 dev:
-	source env.sh && npm start
+	yarn start
 
 test:
-	source env.sh && yarn test
+	yarn run test
 
 test-live:
-	source env.sh && yarn test:live
+	yarn run  test:live
+
+lint:
+	yarn run  lint

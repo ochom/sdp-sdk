@@ -18,7 +18,7 @@ COPY --from=0 /app/dist /app
 
 COPY package.json /app
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 EXPOSE 8080
 
