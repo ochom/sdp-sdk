@@ -1,0 +1,4 @@
+version: '3.7'
+services:
+  sdk:
+    build: https://github.com/ochom/sdp-sdk.git
