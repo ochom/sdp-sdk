@@ -6,7 +6,6 @@ import {
   handleDeactivateSubscription,
 } from "./handlers/subscription";
 
-
 const app = express();
 app.use(bodyParser.json());
 
