@@ -1,13 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
-import swaggerUi from "swagger-ui-express";
 import { handleBulk, handlePremium } from "./handlers/sms";
 import {
   handleActivateSubscription,
   handleDeactivateSubscription,
 } from "./handlers/subscription";
 
-import swaggerDocument from "../swagger.json";
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,22 +15,14 @@ app.get("/", (req: Request, res: Response) => {
   res.send("We are live! <a href='/docs'>Docs</a>");
 });
 
-// define documentation route
-app.get(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, { explorer: true })
-);
-
 // define authenticated groups
 const auth = express.Router();
 auth.use((req: Request, res: Response, next: NextFunction) => {
-  const { username, password } = req.body;
-  if (username && password) {
-    next();
-  } else {
-    res.status(401).send("Unauthorized");
+  const token = req.headers.authorization;
+  if (token !== process.env.ACCESS_TOKEN) {
+    return res.status(401).send("Unauthorized");
   }
+  next();
 });
 
 // subscription
@@ -49,5 +39,5 @@ app.use("/api", auth);
 // start the Express server
 const port = 8080;
 app.listen(port, () => {
-  console.log(`server started at http://localhost:${port}`);
+  console.log(`Server started at http://localhost:${port}`);
 });
