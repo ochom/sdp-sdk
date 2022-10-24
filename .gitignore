@@ -1,3 +1,4 @@
 node_modules
-env.sh
+*.sh
+*.base64
 dist
