@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 // define a route handler for the default home page
 app.get("/", (req: Request, res: Response) => {
-  res.send("We are live! <a href='/docs'>Docs</a>");
+  res.send(`We are live! <a href='/docs'>Docs</a>`);
 });
 
 // define documentation route
@@ -47,7 +47,7 @@ auth.post("/sms/send-premium", handlePremium);
 app.use("/api", auth);
 
 // start the Express server
-const port = 8080;
+const port = parseInt(process.env.PORT) || 8080;
 app.listen(port, () => {
   console.log(`server started at http://localhost:${port}`);
 });
