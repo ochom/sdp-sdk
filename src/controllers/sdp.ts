@@ -66,7 +66,7 @@ export default class SDP {
     this.password = password;
     this.cpID = cpID;
     this.baseURL =
-      process.env.DEPLOYMENT_MODE === "live"
+      process.env.DEPLOYMENT_MODE === "release"
         ? "https://dsvc.safaricom.com:9480/api/"
         : "https://dtsvc.safaricom.com:8480/api/";
   }
