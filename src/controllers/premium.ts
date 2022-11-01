@@ -1,4 +1,5 @@
-import SDP, { Response } from "./sdp";
+import SDP from "./sdp";
+import { Response } from "../utils";
 
 export default class Premium {
   sdp: SDP;

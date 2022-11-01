@@ -18,7 +18,9 @@ app.get("/", (req: Request, res: Response) => {
 const auth = express.Router();
 auth.use((req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["x-api-key"];
-  if (token !== process.env.ACCESS_TOKEN) {
+  const accessToken = process.env.ACCESS_TOKEN;
+  if (token !== accessToken) {
+    console.log("Invalid token", token, accessToken);
     return res.status(401).send("Unauthorized");
   }
   next();
@@ -36,7 +38,7 @@ auth.post("/sms/send-premium", handlePremium);
 app.use("/api", auth);
 
 // start the Express server
-const PORT = 8080;
+const PORT = parseInt(process.env.PORT || "8080");
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
 });

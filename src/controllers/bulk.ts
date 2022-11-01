@@ -1,4 +1,5 @@
-import SDP, { Response } from "./sdp";
+import { Response } from "../utils";
+import SDP from "./sdp";
 
 export default class Bulk {
   sdp: SDP;
