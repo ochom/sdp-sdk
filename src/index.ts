@@ -17,7 +17,7 @@ app.get("/", (req: Request, res: Response) => {
 // define authenticated groups
 const auth = express.Router();
 auth.use((req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization;
+  const token = req.headers["x-api-key"];
   if (token !== process.env.ACCESS_TOKEN) {
     return res.status(401).send("Unauthorized");
   }
@@ -36,7 +36,7 @@ auth.post("/sms/send-premium", handlePremium);
 app.use("/api", auth);
 
 // start the Express server
-const port = parseInt(process.env.PORT) || 8080;
-app.listen(port, () => {
-  console.log(`Server started at http://localhost:${port}`);
+const PORT = 8080;
+app.listen(PORT, () => {
+  console.log(`Server started at http://localhost:${PORT}`);
 });
