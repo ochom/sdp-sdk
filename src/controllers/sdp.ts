@@ -37,7 +37,10 @@ export default class SDP {
     if (!response.success) {
       throw new Error(response.statusText);
     }
-    return response.responseBody.token;
+
+    const { token } = response.responseBody;
+
+    return token;
   }
 
   generateTimestamp(): string {

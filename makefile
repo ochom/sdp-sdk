@@ -1,7 +1,8 @@
 # Makefile
+SHELL:=/bin/bash
 
 dev:
-	yarn start
+	source ./env.sh && yarn start
 
 test:
 	yarn run test

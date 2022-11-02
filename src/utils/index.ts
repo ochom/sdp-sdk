@@ -24,26 +24,33 @@ export class Request {
     data: any,
     headers: any
   ): Promise<Response> {
-    try {
-      headers = { ...this.headers, ...headers };
-      const response = await axios({
-        method,
-        url: this.baseURL + url,
-        headers,
-        data,
+    const response: Response = {
+      success: false,
+      statusCode: 0,
+      statusText: "",
+      responseBody: {},
+    };
+    headers = { ...this.headers, ...headers };
+    url = `${this.baseURL}${url}`;
+    await axios({
+      method,
+      url,
+      headers,
+      data,
+    })
+      .then((res) => {
+        response.success = true;
+        response.statusCode = res.status;
+        response.statusText = res.statusText;
+        response.responseBody = res.data;
+      })
+      .catch((err) => {
+        response.success = false;
+        response.statusCode = err.response.status;
+        response.statusText = err.response.statusText;
+        response.responseBody = err.response.data;
       });
-      return {
-        success: true,
-        statusCode: response.status,
-        statusText: response.statusText,
-        responseBody: response.data,
-      } as Response;
-    } catch (error) {
-      return {
-        success: false,
-        statusCode: 500,
-        statusText: error.message,
-      } as Response;
-    }
+    console.log(response);
+    return response;
   }
 }

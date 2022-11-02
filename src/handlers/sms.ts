@@ -54,10 +54,6 @@ export async function handlePremium(req: Request, res: Response) {
     const sdp = new SDP(username, password, cpID);
     await sdp.init();
 
-    if (!sdp.token) {
-      throw new Error("SDP authentication failed");
-    }
-
     const prem = new Premium(sdp);
     const response = await prem.sendSMS(
       requestID,

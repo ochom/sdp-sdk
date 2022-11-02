@@ -50,7 +50,10 @@ export default class Premium {
       channel: "APIGW",
     };
 
-    const headers = { "X-Authorization": this.sdp.token };
+    const headers = {
+      "X-Authorization": `Bearer ${this.sdp.token}`,
+    };
+
     const response = await this.sdp.request.send(
       "POST",
       "public/SDP/sendSMSRequest",
