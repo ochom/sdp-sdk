@@ -1,4 +1,5 @@
-import SDP, { Response } from "./sdp";
+import { Response } from "../utils";
+import SDP from "./sdp";
 
 export default class Bulk {
   sdp: SDP;
@@ -30,7 +31,10 @@ export default class Bulk {
       },
     };
 
-    const headers = { "X-Authorization": this.sdp.token };
+    const headers = {
+      "X-Authorization": `Bearer ${this.sdp.token}`,
+    };
+
     const response = await this.sdp.request.send(
       "POST",
       "public/CMS/bulksms",

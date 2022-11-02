@@ -3,7 +3,8 @@ name: Testing
 on:
   push:
     branches-ignore:
-      - "main"
+      - main
+      - staging
 
 jobs:
   lint:
