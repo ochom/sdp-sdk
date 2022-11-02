@@ -31,6 +31,7 @@ export class Request {
       responseBody: {},
     };
     headers = { ...this.headers, ...headers };
+    console.log("headers", headers);
     url = `${this.baseURL}${url}`;
     await axios({
       method,
@@ -50,7 +51,6 @@ export class Request {
         response.statusText = err.response.statusText;
         response.responseBody = err.response.data;
       });
-    console.log(response);
     return response;
   }
 }
