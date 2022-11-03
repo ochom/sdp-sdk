@@ -58,7 +58,7 @@ jobs:
           service: ${{ env.IMAGE_NAME }}
           region: europe-west2
           env_vars: |
-            DEPLOYMENT_MODE=release
+            DEPLOYMENT_MODE=production
             ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
 
       - name: "Use output"
