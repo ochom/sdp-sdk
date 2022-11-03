@@ -1,5 +1,8 @@
 import { Request } from "../utils";
 
+const devURL = "https://dtsvc.safaricom.com:8480/api/";
+const prodURL = "https://dsvc.safaricom.com:9480/api/";
+
 export default class SDP {
   username: string;
   password: string;
@@ -13,9 +16,7 @@ export default class SDP {
     this.password = password;
     this.cpID = cpID;
     this.baseURL =
-      process.env.DEPLOYMENT_MODE === "release"
-        ? "https://dsvc.safaricom.com:9480/api/"
-        : "https://dtsvc.safaricom.com:8480/api/";
+      process.env.DEPLOYMENT_MODE === "production" ? prodURL : devURL;
   }
 
   init = async () => {

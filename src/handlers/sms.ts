@@ -33,7 +33,6 @@ export async function handleBulk(req: Request, res: Response) {
     );
     res.send(response);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error.message);
   }
 }
@@ -64,7 +63,6 @@ export async function handlePremium(req: Request, res: Response) {
     );
     res.send(response);
   } catch (error) {
-    console.log(error);
     res.status(500).send(error.message);
   }
 }
