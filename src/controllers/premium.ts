@@ -1,4 +1,5 @@
-import SDP, { Response } from "./sdp";
+import SDP from "./sdp";
+import { Response } from "../utils";
 
 export default class Premium {
   sdp: SDP;
@@ -49,7 +50,10 @@ export default class Premium {
       channel: "APIGW",
     };
 
-    const headers = { "X-Authorization": this.sdp.token };
+    const headers = {
+      "X-Authorization": `Bearer ${this.sdp.token}`,
+    };
+
     const response = await this.sdp.request.send(
       "POST",
       "public/SDP/sendSMSRequest",
