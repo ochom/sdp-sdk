@@ -1,17 +1,21 @@
-import express, { Request, Response, NextFunction } from "express";
-import bodyParser from "body-parser";
-import { handleBulk, handlePremium } from "./handlers/sms";
+import express, { NextFunction, Request, Response } from "express";
 import {
   handleActivateSubscription,
   handleDeactivateSubscription,
 } from "./handlers/subscription";
+import { handleBulk, handlePremium } from "./handlers/sms";
+
+import axios from "axios";
+import bodyParser from "body-parser";
 
 const app = express();
 app.use(bodyParser.json());
 
 // define a route handler for the default home page
 app.get("/", (req: Request, res: Response) => {
-  res.send(`We are live! <a href='/docs'>Docs</a>`);
+  axios.get("https://curlmyip.org").then((response) => {
+    res.send(`We are liv at: ${response.data}`);
+  });
 });
 
 // define authenticated groups

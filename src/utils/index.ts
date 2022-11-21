@@ -31,10 +31,7 @@ export class Request {
       responseBody: {},
     };
     headers = { ...this.headers, ...headers };
-    console.log("headers", headers);
     url = `${this.baseURL}${url}`;
-
-    console.log("url", url, "data", data, "headers", headers);
 
     await axios({
       method,
