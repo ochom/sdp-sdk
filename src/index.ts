@@ -24,6 +24,7 @@ auth.use((req: Request, res: Response, next: NextFunction) => {
   const token = req.headers["x-api-key"];
   const accessToken = process.env.ACCESS_TOKEN;
   if (token !== accessToken) {
+    console.log("Invalid token:", token, "valid token:", accessToken);
     return res.status(401).send("Unauthorized");
   }
   next();
