@@ -48,7 +48,8 @@ export default class SDP {
         this.token.set(this.accessToken);
       }
     } catch (error) {
-      throw new Error(error.message);
+      this.token.setFetching(false);
+      throw error;
     }
   };
 
