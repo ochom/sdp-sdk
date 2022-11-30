@@ -19,16 +19,18 @@ export default class Bulk {
   ): Promise<Response> {
     const body = {
       timeStamp: this.sdp.generateTimestamp(),
-      dataSet: {
-        channel: "sms",
-        uniqueId: requestID,
-        userName,
-        packageId: packageID,
-        oa: originAddress,
-        msisdn: recipients,
-        message,
-        actionResponseURL: callbackURL,
-      },
+      dataSet: [
+        {
+          userName,
+          channel: "sms",
+          packageId: packageID,
+          oa: originAddress, // oa is short for originAddress e.g TestSender
+          msisdn: recipients.join(","),
+          message,
+          uniqueId: requestID,
+          actionResponseURL: callbackURL,
+        },
+      ],
     };
 
     const headers = {

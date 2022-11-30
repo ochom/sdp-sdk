@@ -45,6 +45,20 @@ export default class SDP {
   }
 
   generateTimestamp(): string {
-    return new Date().toISOString().replace(/z|t/gi, " ").trim();
+    const date = new Date();
+    const yy = date.getFullYear();
+    const mm = date.getMonth() + 1;
+    const d = date.getDate();
+    const h = date.getHours();
+    const m = date.getMinutes();
+    const s = date.getSeconds();
+
+    const month = mm < 10 ? `0${mm}` : mm;
+    const day = d < 10 ? `0${d}` : d;
+    const hour = h < 10 ? `0${h}` : h;
+    const minute = m < 10 ? `0${m}` : m;
+    const second = s < 10 ? `0${s}` : s;
+
+    return `${yy}${month}${day}${hour}${minute}${second}`;
   }
 }
