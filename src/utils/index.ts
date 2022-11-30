@@ -1,11 +1,32 @@
 import axios from "axios";
 
 export interface Response {
-  success: boolean;
-  statusCode: number;
-  statusText: string;
-  responseBody: any;
+  success?: boolean;
+  statusCode?: number;
+  statusText?: string;
+  responseBody?: any;
 }
+
+const catchError = (error: any): Response => {
+  const response: Response = {};
+  if (error.response) {
+    response.success = false;
+    response.statusCode = error.response.status;
+    response.statusText = error.response.statusText;
+    response.responseBody = error.response.data;
+  } else if (error.request) {
+    response.success = false;
+    response.statusCode = 500;
+    response.statusText = "Network Error";
+    response.responseBody = error.request;
+  } else {
+    response.success = false;
+    response.statusCode = 500;
+    response.statusText = "Unknown Error";
+    response.responseBody = error.message;
+  }
+  return response;
+};
 
 export class Request {
   baseURL: string;
@@ -24,12 +45,7 @@ export class Request {
     data: any,
     headers: any
   ): Promise<Response> {
-    const response: Response = {
-      success: false,
-      statusCode: 0,
-      statusText: "",
-      responseBody: {},
-    };
+    let response: Response = {};
     headers = { ...this.headers, ...headers };
     url = `${this.baseURL}${url}`;
 
@@ -46,11 +62,9 @@ export class Request {
         response.responseBody = res.data;
       })
       .catch((err) => {
-        response.success = false;
-        response.statusCode = err.response.status;
-        response.statusText = err.response.statusText;
-        response.responseBody = err.response.data;
+        response = catchError(err);
       });
+
     console.log("response", response);
     return response;
   }
