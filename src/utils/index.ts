@@ -65,7 +65,6 @@ export class Request {
         response = catchError(err);
       });
 
-    console.log("response", response);
     return response;
   }
 }
