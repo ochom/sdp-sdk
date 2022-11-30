@@ -1,19 +1,37 @@
-export default class MyToken {
-  accessToken: string;
-  generatedAt: number;
+export default class Token {
+  private value: string;
+  private generatedAt: number;
+  private loading: boolean;
 
   constructor() {
-    this.accessToken = "";
+    this.value = "";
     this.generatedAt = 0;
+    this.loading = false;
   }
 
-  get = (): string => {
-    return this.accessToken;
+  private async sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  getAccessToken = async (): Promise<string> => {
+    // if token is loading wait for it to finish loading
+    // this is to prevent multiple requests to get token
+    if (this.loading) {
+      await this.sleep(1000);
+      return this.getAccessToken();
+    }
+
+    return this.value;
   };
 
-  set = (accessToken: string): void => {
-    this.accessToken = accessToken;
+  set = (newToken: string): void => {
+    this.value = newToken;
     this.generatedAt = Date.now();
+    this.loading = false;
+  };
+
+  setFetching = (): void => {
+    this.loading = true;
   };
 
   isExpired = (): boolean => {
