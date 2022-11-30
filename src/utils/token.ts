@@ -30,8 +30,8 @@ export default class Token {
     this.loading = false;
   };
 
-  setFetching = (): void => {
-    this.loading = true;
+  setFetching = (status = true): void => {
+    this.loading = status;
   };
 
   isExpired = (): boolean => {

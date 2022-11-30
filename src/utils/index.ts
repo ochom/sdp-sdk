@@ -63,6 +63,7 @@ export class Request {
       })
       .catch((err) => {
         response = catchError(err);
+        console.log(response);
       });
 
     return response;
