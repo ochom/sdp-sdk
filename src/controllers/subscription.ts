@@ -1,5 +1,5 @@
-import SDP from "./sdp";
 import { Response } from "../utils";
+import SDP from "./sdp";
 
 export default class Subscription {
   sdp: SDP;
@@ -15,7 +15,7 @@ export default class Subscription {
   ): Promise<Response> => {
     const body = {
       requestId: requestID,
-      requestTimeStamp: this.sdp.generateTimestamp(),
+      requestTimeStamp: Date.now(), // this.sdp.generateTimestamp(),
       channel: "SMS",
       operation: "ACTIVATE",
 
@@ -42,7 +42,7 @@ export default class Subscription {
     };
 
     const headers = {
-      "X-Authorization": `Bearer ${this.sdp.token}`,
+      "X-Authorization": `Bearer ${this.sdp.token.get()}`,
     };
 
     const response = await this.sdp.request.send(
@@ -62,7 +62,7 @@ export default class Subscription {
   ): Promise<Response> => {
     const body = {
       requestId: requestID,
-      requestTimeStamp: this.sdp.generateTimestamp(),
+      requestTimeStamp: Date.now(), // this.sdp.generateTimestamp(),
       channel: "3",
       operation: "DEACTIVATE",
 
@@ -85,7 +85,7 @@ export default class Subscription {
     };
 
     const headers = {
-      "X-Authorization": `Bearer ${this.sdp.token}`,
+      "X-Authorization": `Bearer ${this.sdp.token.get()}`,
     };
     const response = await this.sdp.request.send(
       "POST",

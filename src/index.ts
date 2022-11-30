@@ -1,15 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
-import {
-  handleActivateSubscription,
-  handleDeactivateSubscription,
-} from "./handlers/subscription";
-import { handleBulk, handlePremium } from "./handlers/sms";
 
+import Handler from "./handlers";
 import axios from "axios";
 import bodyParser from "body-parser";
 
 const app = express();
 app.use(bodyParser.json());
+
+const h = new Handler();
 
 // define a route handler for the default home page
 app.get("/", (req: Request, res: Response) => {
@@ -30,12 +28,12 @@ auth.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // subscription
-auth.post("/subscription/activate", handleActivateSubscription);
-auth.post("/subscription/deactivate", handleDeactivateSubscription);
+auth.post("/subscription/activate", h.subscribe);
+auth.post("/subscription/deactivate", h.unSubscribe);
 
 // send sms
-auth.post("/sms/send-bulk", handleBulk);
-auth.post("/sms/send-premium", handlePremium);
+auth.post("/sms/send-bulk", h.handleBulk);
+auth.post("/sms/send-premium", h.handlePremium);
 
 // use the router and 401 anything falling through
 app.use("/api", auth);

@@ -18,12 +18,12 @@ export default class Bulk {
     callbackURL: string
   ): Promise<Response> {
     const body = {
-      timeStamp: this.sdp.generateTimestamp(),
+      timeStamp: Date.now(), // this.sdp.generateTimestamp(),
       dataSet: [
         {
           userName,
           channel: "sms",
-          packageId: packageID,
+          packageId: parseInt(packageID || "0"),
           oa: originAddress, // oa is short for originAddress e.g TestSender
           msisdn: recipients.join(","),
           message,
@@ -34,7 +34,7 @@ export default class Bulk {
     };
 
     const headers = {
-      "X-Authorization": `Bearer ${this.sdp.token}`,
+      "X-Authorization": `Bearer ${this.sdp.token.get()}`,
     };
 
     const response = await this.sdp.request.send(
