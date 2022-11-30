@@ -34,7 +34,7 @@ export default class Bulk {
     };
 
     const headers = {
-      "X-Authorization": `Bearer ${this.sdp.token.get()}`,
+      "X-Authorization": `Bearer ${this.sdp.accessToken}`,
     };
 
     const response = await this.sdp.request.send(
