@@ -10,7 +10,7 @@ env:
 
 jobs:
   push_to_registry:
-    name: Build and Push Docker Image to Docker Hub
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo

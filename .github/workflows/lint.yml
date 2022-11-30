@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - main
       - staging
+      - docker-hub
 
 jobs:
   lint:
