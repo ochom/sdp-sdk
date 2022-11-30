@@ -1,5 +1,5 @@
-import SDP from "./sdp";
 import { Response } from "../utils";
+import SDP from "./sdp";
 
 export default class Premium {
   sdp: SDP;
@@ -51,7 +51,7 @@ export default class Premium {
     };
 
     const headers = {
-      "X-Authorization": `Bearer ${this.sdp.token}`,
+      "X-Authorization": `Bearer ${this.sdp.token.get()}`,
     };
 
     const response = await this.sdp.request.send(
