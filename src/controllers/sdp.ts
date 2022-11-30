@@ -1,5 +1,5 @@
-import MyToken from "..//utils/token";
 import { Request } from "../utils";
+import Token from "../utils/token";
 
 const devURL = "https://dtsvc.safaricom.com:8480/api/";
 const prodURL = "https://dsvc.safaricom.com:9480/api/";
@@ -9,11 +9,12 @@ export default class SDP {
   password: string;
   cpID: string;
   request: Request;
-  token: MyToken;
+  token: Token;
+  accessToken: string;
   baseURL: string;
 
   constructor(
-    myToken: MyToken,
+    myToken: Token,
     username: string,
     password: string,
     cpID: string
@@ -29,12 +30,22 @@ export default class SDP {
   init = async () => {
     try {
       this.request = new Request(this.baseURL);
-      if (this.token.isExpired()) {
-        console.log("Token expired, generating a new one...");
-        const accessToken = await this.getAccessToken();
-        this.token.set(accessToken);
+      const token = await this.token.getAccessToken();
+      if (token !== "") {
+        if (!this.token.isExpired()) {
+          // if token is not expired
+          this.accessToken = token;
+        } else {
+          // if token is expired
+          this.token.setFetching();
+          this.accessToken = await this.getAccessToken();
+          this.token.set(this.accessToken);
+        }
       } else {
-        console.log("Token not expired, using existing one...");
+        // if token is empty
+        this.token.setFetching();
+        this.accessToken = await this.getAccessToken();
+        this.token.set(this.accessToken);
       }
     } catch (error) {
       throw new Error(error.message);
