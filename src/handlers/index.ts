@@ -19,6 +19,7 @@ export default class Handler {
         username,
         password,
         cpID,
+        cpPassword = "",
         partnerUsername,
         packageID,
         requestID,
@@ -39,7 +40,8 @@ export default class Handler {
         originAddress,
         recipients,
         message,
-        callbackURL
+        callbackURL,
+        cpPassword
       );
       res.send(response);
     } catch (error) {

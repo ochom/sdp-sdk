@@ -15,8 +15,17 @@ export default class Bulk {
     originAddress: string,
     recipients: string[],
     message: string,
-    callbackURL: string
+    callbackURL: string,
+    cpPassword: string
   ): Promise<Response> {
+    const timeStamp = Date.now();
+
+    cpPassword = this.sdp.cpID + cpPassword + timeStamp;
+
+    // // md5 hash cpPassword
+    // const md5 = require("md5");
+    // cpPassword = md5(cpPassword);
+
     const body = {
       timeStamp: Date.now(), // this.sdp.generateTimestamp(),
       dataSet: [
@@ -29,6 +38,7 @@ export default class Bulk {
           message,
           uniqueId: requestID,
           actionResponseURL: callbackURL,
+          cpPassword,
         },
       ],
     };
