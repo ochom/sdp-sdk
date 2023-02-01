@@ -49,6 +49,7 @@ export class Request {
     headers = { ...this.headers, ...headers };
     url = `${this.baseURL}${url}`;
     try {
+      console.log(url, method, data, headers);
       const res = await axios({
         method,
         url,
