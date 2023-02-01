@@ -1,11 +1,11 @@
-name: Build and Deploy
+name: Build for Cloud Run
 on:
   push:
     branches:
-      - staging
+      - cr
 
 env:
-  IMAGE_NAME: safaricom-sdp-staging
+  IMAGE_NAME: safaricom-sdp
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
   GCP_KEYS_JSON: ${{ secrets.GCP_KEYS_JSON }}
 
@@ -58,8 +58,8 @@ jobs:
           service: ${{ env.IMAGE_NAME }}
           region: europe-west2
           env_vars: |
-            DEPLOYMENT_MODE=staging
-            ACCESS_TOKEN=${{ secrets.STAGING_ACCESS_TOKEN }}
+            DEPLOYMENT_MODE=production
+            ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
 
       - name: "Use output"
         run: 'curl "${{ steps.deploy.outputs.url }}"'

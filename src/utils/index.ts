@@ -48,23 +48,21 @@ export class Request {
     let response: Response = {};
     headers = { ...this.headers, ...headers };
     url = `${this.baseURL}${url}`;
-
-    await axios({
-      method,
-      url,
-      headers,
-      data,
-    })
-      .then((res) => {
-        response.success = true;
-        response.statusCode = res.status;
-        response.statusText = res.statusText;
-        response.responseBody = res.data;
-      })
-      .catch((err) => {
-        response = catchError(err);
-        console.log(response);
+    try {
+      const res = await axios({
+        method,
+        url,
+        data,
+        headers,
       });
+      response.success = true;
+      response.statusCode = res.status;
+      response.statusText = res.statusText;
+      response.responseBody = res.data;
+    } catch (error) {
+      response = catchError(error);
+      console.log(url, response);
+    }
 
     return response;
   }

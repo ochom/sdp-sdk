@@ -2,3 +2,6 @@ node_modules
 *.sh
 *.base64
 dist
+*.key
+*.pem
+*.crt

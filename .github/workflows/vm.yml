@@ -1,0 +1,51 @@
+name: Build for VM
+
+on:
+  push:
+    branches:
+      - vm
+
+env:
+  IMAGE_NAME: ochom/sdp-sdk:latest
+  SERVICE_NAME: "sdk"
+
+jobs:
+  build-push-docker:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: docker build -t  $IMAGE_NAME  .
+
+      - name: Docker Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Push
+        run: docker push $IMAGE_NAME
+
+  deploy:
+    needs: build-push-docker
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: AppleBoy SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_SSH_HOST }}
+          username: ${{ secrets.STAGING_SSH_USERNAME }}
+          password: ${{ secrets.STAGING_SSH_PASSWORD }}
+          envs: SERVICE_NAME
+          script: |
+            cd /home/rick/deployment
+            docker compose pull $SERVICE_NAME
+            docker compose up -d --build --force-recreate $SERVICE_NAME
+            docker image prune --all --force
