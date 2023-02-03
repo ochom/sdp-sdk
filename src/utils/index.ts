@@ -48,6 +48,8 @@ export class Request {
     let response: Response = {};
     headers = { ...this.headers, ...headers };
     url = `${this.baseURL}${url}`;
+
+    console.log(url, method, data, headers);
     try {
       const res = await axios({
         method,
