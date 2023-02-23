@@ -1,16 +1,14 @@
-name: Build for VM
-
+name: Build for Cloud Run
 on:
   push:
     branches:
-      - vm
+      - main
 
 env:
   IMAGE_NAME: ochom/sdp-sdk:latest
-  SERVICE_NAME: "sdk"
 
 jobs:
-  build-push-docker:
+  build:
     name: Build and Push
     runs-on: ubuntu-latest
     steps:
@@ -29,9 +27,35 @@ jobs:
       - name: Docker Push
         run: docker push $IMAGE_NAME
 
-  deploy:
-    needs: build-push-docker
-    name: Deploy
+  deploy-cloud-run:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - id: auth
+        name: Authenticate GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_KEYS_JSON }}
+
+      - name: "Deploy to Cloud Run"
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          image: $IMAGE_NAME
+          service: safaricom-sdp
+          region: europe-west2
+          env_vars: |
+            DEPLOYMENT_MODE=production
+            ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
+
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
+
+  deploy-digitalocean:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,6 +63,8 @@ jobs:
 
       - name: AppleBoy SSH
         uses: appleboy/ssh-action@master
+        env:
+          SERVICE_NAME: sdk
         with:
           host: ${{ secrets.STAGING_SSH_HOST }}
           username: ${{ secrets.STAGING_SSH_USERNAME }}
