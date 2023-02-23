@@ -49,7 +49,6 @@ export class Request {
     headers = { ...this.headers, ...headers };
     url = `${this.baseURL}${url}`;
 
-    console.log(url, method, data, headers);
     try {
       const res = await axios({
         method,
@@ -63,7 +62,7 @@ export class Request {
       response.responseBody = res.data;
     } catch (error) {
       response = catchError(error);
-      console.log(url, response);
+      console.log(url, method, data, headers);
     }
 
     return response;
