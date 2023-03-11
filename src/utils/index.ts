@@ -62,9 +62,11 @@ export class Request {
       response.responseBody = res.data;
     } catch (error) {
       response = catchError(error);
-      console.log(url, method, data, headers);
     }
 
+    const req = { url, method, data, headers };
+    console.log("Request: ", JSON.stringify(req));
+    console.log("Response: ", JSON.stringify(response));
     return response;
   }
 }
