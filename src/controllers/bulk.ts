@@ -14,9 +14,9 @@ export default class Bulk {
     cpName: string,
     packageID: string,
     senderID: string,
-    msisdn: string,
+    recipient: string,
     message: string,
-    actionResponseURL: string,
+    callbackURL: string
   ): Promise<Response> {
     const timeStamp = Date.now();
 
@@ -26,6 +26,8 @@ export default class Bulk {
     const packageId = parseInt(packageID || "0");
     const oa = senderID; // oa is short for originAddress e.g TestSender
     const cpPassword = md5(`${this.sdp.cpID}${timeStamp}`); // cpPassword is short for content provider password
+    const msisdn = recipient;
+    const actionResponseURL = callbackURL;
 
     const body = {
       timeStamp, // this.sdp.generateTimestamp(),
