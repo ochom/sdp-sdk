@@ -14,7 +14,6 @@ export default class Bulk {
     userName: string,
     packageID: string,
     originAddress: string,
-    recipients: string[],
     recipient: string,
     message: string,
     callbackURL: string,
@@ -25,8 +24,6 @@ export default class Bulk {
     cpPassword = this.sdp.cpID + cpPassword + timeStamp;
     cpPassword = md5(cpPassword);
 
-    const mobile = recipients.length > 0 ? recipients.join(",") : recipient;
-
     const body = {
       timeStamp: Date.now(), // this.sdp.generateTimestamp(),
       dataSet: [
@@ -35,7 +32,7 @@ export default class Bulk {
           channel: "sms",
           packageId: parseInt(packageID || "0"),
           oa: originAddress, // oa is short for originAddress e.g TestSender
-          msisdn: mobile,
+          msisdn: recipient,
           message,
           uniqueId: requestID,
           actionResponseURL: callbackURL,
