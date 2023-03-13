@@ -11,9 +11,9 @@ export default class Bulk {
 
   async sendSMS(
     requestID: string,
-    userName: string,
+    cpName: string,
     packageID: string,
-    originAddress: string,
+    senderID: string,
     msisdn: string,
     message: string,
     actionResponseURL: string,
@@ -21,9 +21,10 @@ export default class Bulk {
     const timeStamp = Date.now();
 
     const uniqueId = requestID;
+    const userName = cpName;
     const channel = "sms";
     const packageId = parseInt(packageID || "0");
-    const oa = originAddress; // oa is short for originAddress e.g TestSender
+    const oa = senderID; // oa is short for originAddress e.g TestSender
     const cpPassword = md5(`${this.sdp.cpID}${timeStamp}`); // cpPassword is short for content provider password
 
     const body = {

@@ -19,13 +19,12 @@ export default class Handler {
         username,
         password,
         cpID,
-        cpPassword = "",
-        partnerUsername,
+        cpName,
         packageID,
         requestID,
         recipient,
         message,
-        originAddress,
+        senderID,
         callbackURL,
       } = req.body;
 
@@ -35,13 +34,12 @@ export default class Handler {
       const bulk = new Bulk(sdp);
       const response = await bulk.sendSMS(
         requestID,
-        partnerUsername,
+        cpName,
         packageID,
-        originAddress,
+        senderID,
         recipient,
         message,
-        callbackURL,
-        cpPassword
+        callbackURL
       );
       res.send(response);
     } catch (error) {
