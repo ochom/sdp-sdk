@@ -15,6 +15,7 @@ export default class Bulk {
     packageID: string,
     originAddress: string,
     recipients: string[],
+    recipient: string,
     message: string,
     callbackURL: string,
     cpPassword: string
@@ -24,6 +25,8 @@ export default class Bulk {
     cpPassword = this.sdp.cpID + cpPassword + timeStamp;
     cpPassword = md5(cpPassword);
 
+    const mobile = recipients.length > 0 ? recipients.join(",") : recipient;
+
     const body = {
       timeStamp: Date.now(), // this.sdp.generateTimestamp(),
       dataSet: [
@@ -32,7 +35,7 @@ export default class Bulk {
           channel: "sms",
           packageId: parseInt(packageID || "0"),
           oa: originAddress, // oa is short for originAddress e.g TestSender
-          msisdn: recipients.join(","),
+          msisdn: mobile,
           message,
           uniqueId: requestID,
           actionResponseURL: callbackURL,
@@ -40,6 +43,11 @@ export default class Bulk {
         },
       ],
     };
+
+    // if not in production mode, delete packageID from body
+    if (this.sdp.deploymentMode !== "production") {
+      delete body.dataSet[0].packageId;
+    }
 
     const headers = {
       "X-Authorization": `Bearer ${this.sdp.accessToken}`,

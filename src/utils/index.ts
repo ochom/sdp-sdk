@@ -1,5 +1,10 @@
 import axios from "axios";
 
+export type DeploymentMode = "production" | "development";
+
+const devURL = "https://dtsvc.safaricom.com:8480/api/";
+const prodURL = "https://dsvc.safaricom.com:9480/api/";
+
 export interface Response {
   success?: boolean;
   statusCode?: number;
@@ -35,8 +40,11 @@ export class Request {
     "X-Requested-With": "XMLHttpRequest",
   };
 
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
+  constructor(deploymentMode: DeploymentMode) {
+    this.baseURL = devURL;
+    if (deploymentMode === "production") {
+      this.baseURL = prodURL;
+    }
   }
 
   async send(

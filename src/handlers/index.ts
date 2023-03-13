@@ -24,6 +24,7 @@ export default class Handler {
         packageID,
         requestID,
         recipients,
+        recipient = "",
         message,
         originAddress,
         callbackURL,
@@ -39,6 +40,7 @@ export default class Handler {
         packageID,
         originAddress,
         recipients,
+        recipient,
         message,
         callbackURL,
         cpPassword

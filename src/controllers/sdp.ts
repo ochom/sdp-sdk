@@ -1,8 +1,6 @@
-import { Request } from "../utils";
-import Token from "../utils/token";
+import { DeploymentMode, Request } from "../utils";
 
-const devURL = "https://dtsvc.safaricom.com:8480/api/";
-const prodURL = "https://dsvc.safaricom.com:9480/api/";
+import Token from "../utils/token";
 
 export default class SDP {
   username: string;
@@ -11,7 +9,7 @@ export default class SDP {
   request: Request;
   token: Token;
   accessToken: string;
-  baseURL: string;
+  deploymentMode: DeploymentMode;
 
   constructor(
     myToken: Token,
@@ -23,13 +21,12 @@ export default class SDP {
     this.username = username;
     this.password = password;
     this.cpID = cpID;
-    this.baseURL =
-      process.env.DEPLOYMENT_MODE === "production" ? prodURL : devURL;
+    this.deploymentMode = process.env.DEPLOYMENT_MODE as DeploymentMode;
   }
 
   init = async () => {
     try {
-      this.request = new Request(this.baseURL);
+      this.request = new Request(this.deploymentMode);
       const token = await this.token.getAccessToken();
       if (token !== "") {
         if (!this.token.isExpired()) {
