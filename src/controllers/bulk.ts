@@ -14,28 +14,30 @@ export default class Bulk {
     userName: string,
     packageID: string,
     originAddress: string,
-    recipient: string,
+    msisdn: string,
     message: string,
-    callbackURL: string,
-    cpPassword: string
+    actionResponseURL: string,
   ): Promise<Response> {
     const timeStamp = Date.now();
 
-    cpPassword = this.sdp.cpID + cpPassword + timeStamp;
-    cpPassword = md5(cpPassword);
+    const uniqueId = requestID;
+    const channel = "sms";
+    const packageId = parseInt(packageID || "0");
+    const oa = originAddress; // oa is short for originAddress e.g TestSender
+    const cpPassword = md5(`${this.sdp.cpID}${timeStamp}`); // cpPassword is short for content provider password
 
     const body = {
-      timeStamp: Date.now(), // this.sdp.generateTimestamp(),
+      timeStamp, // this.sdp.generateTimestamp(),
       dataSet: [
         {
+          uniqueId,
           userName,
-          channel: "sms",
-          packageId: parseInt(packageID || "0"),
-          oa: originAddress, // oa is short for originAddress e.g TestSender
-          msisdn: recipient,
+          channel,
+          packageId,
+          oa,
+          msisdn,
           message,
-          uniqueId: requestID,
-          actionResponseURL: callbackURL,
+          actionResponseURL,
           cpPassword,
         },
       ],
