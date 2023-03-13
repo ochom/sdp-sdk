@@ -23,7 +23,7 @@ export default class Handler {
         partnerUsername,
         packageID,
         requestID,
-        recipients,
+        recipient,
         message,
         originAddress,
         callbackURL,
@@ -38,7 +38,7 @@ export default class Handler {
         partnerUsername,
         packageID,
         originAddress,
-        recipients,
+        recipient,
         message,
         callbackURL,
         cpPassword

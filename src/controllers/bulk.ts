@@ -14,7 +14,7 @@ export default class Bulk {
     userName: string,
     packageID: string,
     originAddress: string,
-    recipients: string[],
+    recipient: string,
     message: string,
     callbackURL: string,
     cpPassword: string
@@ -32,7 +32,7 @@ export default class Bulk {
           channel: "sms",
           packageId: parseInt(packageID || "0"),
           oa: originAddress, // oa is short for originAddress e.g TestSender
-          msisdn: recipients.join(","),
+          msisdn: recipient,
           message,
           uniqueId: requestID,
           actionResponseURL: callbackURL,
@@ -40,6 +40,11 @@ export default class Bulk {
         },
       ],
     };
+
+    // if not in production mode, delete packageID from body
+    if (this.sdp.deploymentMode !== "production") {
+      delete body.dataSet[0].packageId;
+    }
 
     const headers = {
       "X-Authorization": `Bearer ${this.sdp.accessToken}`,
