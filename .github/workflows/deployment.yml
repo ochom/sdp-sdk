@@ -80,25 +80,3 @@ jobs:
 
       - name: "Use output"
         run: 'curl "${{ steps.deploy.outputs.url }}"'
-
-  # deploy-digitalocean:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - name: AppleBoy SSH
-  #       uses: appleboy/ssh-action@master
-  #       env:
-  #         SERVICE_NAME: sdk
-  #       with:
-  #         host: ${{ secrets.STAGING_SSH_HOST }}
-  #         username: ${{ secrets.STAGING_SSH_USERNAME }}
-  #         password: ${{ secrets.STAGING_SSH_PASSWORD }}
-  #         envs: SERVICE_NAME
-  #         script: |
-  #           cd /var/www/deployment
-  #           docker compose pull $SERVICE_NAME
-  #           docker compose up -d --build --force-recreate $SERVICE_NAME
-  #           docker image prune --all --force
