@@ -11,7 +11,6 @@ export default class Bulk {
   async sendSMS(
     requestID: string,
     cpName: string,
-    packageID: string,
     senderID: string,
     recipient: string,
     message: string,
@@ -22,7 +21,6 @@ export default class Bulk {
     const uniqueId = requestID;
     const userName = cpName;
     const channel = "sms";
-    // const packageId = parseInt(packageID || "0");
     const oa = senderID;
     const msisdn = recipient;
     const actionResponseURL = callbackURL;
@@ -41,11 +39,6 @@ export default class Bulk {
         },
       ],
     };
-
-    // // if not in production mode, delete packageID from body
-    // if (this.sdp.deploymentMode !== "production") {
-    //   delete body.dataSet[0].packageId;
-    // }
 
     const headers = {
       "X-Authorization": `Bearer ${this.sdp.accessToken}`,
