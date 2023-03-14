@@ -23,7 +23,7 @@ export default class Bulk {
     const userName = cpName;
     const channel = "sms";
     // const packageId = parseInt(packageID || "0");
-    const oa = senderID; // oa is short for originAddress e.g TestSender
+    const oa = senderID;
     const msisdn = recipient;
     const actionResponseURL = callbackURL;
 
