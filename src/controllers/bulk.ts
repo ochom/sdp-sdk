@@ -1,6 +1,5 @@
 import { Response } from "../utils";
 import SDP from "./sdp";
-import md5 from "md5";
 
 export default class Bulk {
   sdp: SDP;
@@ -23,9 +22,8 @@ export default class Bulk {
     const uniqueId = requestID;
     const userName = cpName;
     const channel = "sms";
-    const packageId = parseInt(packageID || "0");
+    // const packageId = parseInt(packageID || "0");
     const oa = senderID; // oa is short for originAddress e.g TestSender
-    const cpPassword = md5(`${this.sdp.cpID}${timeStamp}`); // cpPassword is short for content provider password
     const msisdn = recipient;
     const actionResponseURL = callbackURL;
 
@@ -36,20 +34,18 @@ export default class Bulk {
           uniqueId,
           userName,
           channel,
-          packageId,
           oa,
           msisdn,
           message,
           actionResponseURL,
-          cpPassword,
         },
       ],
     };
 
-    // if not in production mode, delete packageID from body
-    if (this.sdp.deploymentMode !== "production") {
-      delete body.dataSet[0].packageId;
-    }
+    // // if not in production mode, delete packageID from body
+    // if (this.sdp.deploymentMode !== "production") {
+    //   delete body.dataSet[0].packageId;
+    // }
 
     const headers = {
       "X-Authorization": `Bearer ${this.sdp.accessToken}`,
