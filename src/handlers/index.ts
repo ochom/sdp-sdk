@@ -20,7 +20,6 @@ export default class Handler {
         password,
         cpID,
         cpName,
-        packageID,
         requestID,
         recipient,
         message,
@@ -35,7 +34,6 @@ export default class Handler {
       const response = await bulk.sendSMS(
         requestID,
         cpName,
-        packageID,
         senderID,
         recipient,
         message,
