@@ -6,11 +6,12 @@ on:
 
 env:
   IMAGE_NAME: ochom/sdp-sdk:latest
+  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
 
 jobs:
   build:
     name: Build and Push
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -29,7 +30,7 @@ jobs:
 
   deploy-cloud-run-solami:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,29 +55,49 @@ jobs:
       - name: "Use output"
         run: 'curl "${{ steps.deploy.outputs.url }}"'
 
-  deploy-cloud-run-chiruku:
+  deploy-vm-chiriku:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - id: auth
-        name: Authenticate GCP
-        uses: google-github-actions/auth@v1
+      - name: AppleBoy SSH
+        uses: appleboy/ssh-action@master
         with:
-          credentials_json: ${{ secrets.OCHOM_GCP_KEYS_JSON }}
+          host: ${{ secrets.STAGING_SSH_HOST }}
+          username: ${{ secrets.STAGING_SSH_USERNAME }}
+          password: ${{ secrets.STAGING_SSH_PASSWORD }}
+          envs: SERVICE_NAME
+          script: |
+            cd /var/www/deployment
+            docker compose pull $SERVICE_NAME
+            docker compose up -d --build --force-recreate $SERVICE_NAME
+            docker image prune --all --force
 
-      - name: "Deploy to Cloud Run"
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v1
-        with:
-          image: ${{ env.IMAGE_NAME }}
-          service: safaricom-sdp-sdk
-          region: europe-west2
-          env_vars: |
-            DEPLOYMENT_MODE=test
-            ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
+  # deploy-cloud-run-chiruku:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: "Use output"
-        run: 'curl "${{ steps.deploy.outputs.url }}"'
+  #     - id: auth
+  #       name: Authenticate GCP
+  #       uses: google-github-actions/auth@v1
+  #       with:
+  #         credentials_json: ${{ secrets.OCHOM_GCP_KEYS_JSON }}
+
+  #     - name: "Deploy to Cloud Run"
+  #       id: deploy
+  #       uses: google-github-actions/deploy-cloudrun@v1
+  #       with:
+  #         image: ${{ env.IMAGE_NAME }}
+  #         service: safaricom-sdp-sdk
+  #         region: europe-west2
+  #         env_vars: |
+  #           DEPLOYMENT_MODE=test
+  #           ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
+
+  #     - name: "Use output"
+  #       run: 'curl "${{ steps.deploy.outputs.url }}"'
