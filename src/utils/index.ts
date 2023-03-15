@@ -70,11 +70,11 @@ export class Request {
       response.responseBody = res.data;
     } catch (error) {
       response = catchError(error);
+
+      console.log("Request: ", JSON.stringify({ url, method, data, headers }));
+      console.log("Response: ", JSON.stringify(response));
     }
 
-    const req = { url, method, data, headers };
-    console.log("Request: ", JSON.stringify(req));
-    console.log("Response: ", JSON.stringify(response));
     return response;
   }
 }
