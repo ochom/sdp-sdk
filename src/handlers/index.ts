@@ -20,10 +20,10 @@ export default class Handler {
         password,
         cpID,
         cpName,
+        senderID,
         requestID,
         recipient,
         message,
-        senderID,
         callbackURL,
       } = req.body;
 
@@ -41,6 +41,7 @@ export default class Handler {
       );
       res.send(response);
     } catch (error) {
+      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
@@ -71,31 +72,42 @@ export default class Handler {
       );
       res.send(response);
     } catch (error) {
+      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
 
   subscribe = async (req: Request, res: Response) => {
-    const { username, password, cpID, requestID, offerCode, phoneNumber } =
-      req.body;
+    try {
+      const { username, password, cpID, requestID, offerCode, phoneNumber } =
+        req.body;
 
-    const sdp = new SDP(this.token, username, password, cpID);
-    await sdp.init();
+      const sdp = new SDP(this.token, username, password, cpID);
+      await sdp.init();
 
-    const subs = new Subscription(sdp);
-    const response = await subs.activate(requestID, offerCode, phoneNumber);
-    res.send(response);
+      const subs = new Subscription(sdp);
+      const response = await subs.activate(requestID, offerCode, phoneNumber);
+      res.send(response);
+    } catch (error) {
+      console.log(error?.message || "Unknown error");
+      res.status(500).send(error.message);
+    }
   };
 
   unSubscribe = async (req: Request, res: Response) => {
-    const { username, password, cpID, requestID, offerCode, phoneNumber } =
-      req.body;
+    try {
+      const { username, password, cpID, requestID, offerCode, phoneNumber } =
+        req.body;
 
-    const sdp = new SDP(this.token, username, password, cpID);
-    await sdp.init();
+      const sdp = new SDP(this.token, username, password, cpID);
+      await sdp.init();
 
-    const subs = new Subscription(sdp);
-    const response = await subs.deactivate(requestID, offerCode, phoneNumber);
-    res.send(response);
+      const subs = new Subscription(sdp);
+      const response = await subs.deactivate(requestID, offerCode, phoneNumber);
+      res.send(response);
+    } catch (error) {
+      console.log(error?.message || "Unknown error");
+      res.status(500).send(error.message);
+    }
   };
 }
