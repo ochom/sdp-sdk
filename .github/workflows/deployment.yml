@@ -28,32 +28,32 @@ jobs:
       - name: Docker Push
         run: docker push $IMAGE_NAME
 
-  deploy-cloud-run-solami:
-    needs: build
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # deploy-cloud-run-solami:
+  #   needs: build
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - id: auth
-        name: Authenticate GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_KEYS_JSON }}
+  #     - id: auth
+  #       name: Authenticate GCP
+  #       uses: google-github-actions/auth@v1
+  #       with:
+  #         credentials_json: ${{ secrets.GCP_KEYS_JSON }}
 
-      - name: "Deploy to Cloud Run"
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v1
-        with:
-          image: ${{ env.IMAGE_NAME }}
-          service: safaricom-sdp
-          region: europe-west2
-          env_vars: |
-            DEPLOYMENT_MODE=production
-            ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
+  #     - name: "Deploy to Cloud Run"
+  #       id: deploy
+  #       uses: google-github-actions/deploy-cloudrun@v1
+  #       with:
+  #         image: ${{ env.IMAGE_NAME }}
+  #         service: safaricom-sdp
+  #         region: europe-west2
+  #         env_vars: |
+  #           DEPLOYMENT_MODE=production
+  #           ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
 
-      - name: "Use output"
-        run: 'curl "${{ steps.deploy.outputs.url }}"'
+  #     - name: "Use output"
+  #       run: 'curl "${{ steps.deploy.outputs.url }}"'
 
   deploy-vm-chiriku:
     needs: build
