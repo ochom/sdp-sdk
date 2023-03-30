@@ -2,14 +2,13 @@ version: "3.7"
 services:
   sdk:
     container_name: sdk
-    image: ochom/sdp-sdk:latest
+    build: .
+    # image: ochom/sdp-sdk:latest
     ports:
       - "8088:5000"
     environment:
       PORT: 5000
       DEPLOYMENT_MODE: test
       ACCESS_TOKEN: ${ACCESS_TOKEN}
-      NODE_EXTRA_CA_CERTS: /ssl-selfsigned.crt
-      NODE_TLS_REJECT_UNAUTHORIZED: 0
     volumes:
-      - ./ssl-selfsigned.crt:/ssl-selfsigned.crt
+      - ./certs:/app/ssl

@@ -1,4 +1,6 @@
 import axios, { AxiosError } from "axios";
+import https from "https";
+import fs from "fs";
 
 export type DeploymentMode = "production" | "development";
 
@@ -58,11 +60,19 @@ export class Request {
     url = `${this.baseURL}${url}`;
 
     try {
+      const httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+        cert: fs.readFileSync("/app/ssl/cert.pem"),
+        key: fs.readFileSync("/app/ssl/key.pem"),
+        passphrase: "password",
+      });
+
       const res = await axios({
         method,
         url,
         data,
         headers,
+        httpsAgent,
       });
       response.success = true;
       response.statusCode = res.status;
