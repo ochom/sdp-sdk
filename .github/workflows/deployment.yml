@@ -70,7 +70,14 @@ jobs:
           password: ${{ secrets.STAGING_SSH_PASSWORD }}
           envs: SERVICE_NAME
           script: |
-            cd /var/www/deployment
-            docker compose pull $SERVICE_NAME
-            docker compose up -d --build --force-recreate $SERVICE_NAME
+            # deploy to staging
+            cd /var/www/staging
+            docker compose pull sdk
+            docker compose up -d --build --force-recreate sdk
+
+            # deploy to production
+            cd /var/www/production
+            docker compose up -d --build --force-recreate sdk
+
+            # clean up
             docker image prune --all --force
