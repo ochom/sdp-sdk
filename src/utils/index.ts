@@ -69,12 +69,9 @@ export class Request {
       response.statusText = res.statusText;
       response.responseBody = res.data;
     } catch (error) {
-      response = catchError(error);
-
-      const { success, statusCode, statusText, responseBody } = response;
-
       console.log("Request: ", JSON.stringify({ url, method, data, headers }));
-      console.log("Response: ", JSON.stringify({ success, statusCode, statusText, responseBody }));
+      console.log("Error: ", error);
+      response = catchError(error);
     }
 
     return response;

@@ -41,7 +41,6 @@ export default class Handler {
       );
       res.send(response);
     } catch (error) {
-      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
@@ -72,7 +71,6 @@ export default class Handler {
       );
       res.send(response);
     } catch (error) {
-      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
@@ -89,7 +87,6 @@ export default class Handler {
       const response = await subs.activate(requestID, offerCode, phoneNumber);
       res.send(response);
     } catch (error) {
-      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
@@ -106,7 +103,6 @@ export default class Handler {
       const response = await subs.deactivate(requestID, offerCode, phoneNumber);
       res.send(response);
     } catch (error) {
-      console.log(error?.message || "Unknown error");
       res.status(500).send(error.message);
     }
   };
