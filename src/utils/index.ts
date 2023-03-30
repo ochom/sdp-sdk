@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export type DeploymentMode = "production" | "development";
 
@@ -12,7 +12,7 @@ export interface Response {
   responseBody?: any;
 }
 
-const catchError = (error: any): Response => {
+const catchError = (error: AxiosError): Response => {
   const response: Response = {};
   if (error.response) {
     response.success = false;
@@ -23,7 +23,7 @@ const catchError = (error: any): Response => {
     response.success = false;
     response.statusCode = 500;
     response.statusText = "Network Error";
-    response.responseBody = error.request;
+    response.responseBody = "Network Error"
   } else {
     response.success = false;
     response.statusCode = 500;
@@ -71,8 +71,10 @@ export class Request {
     } catch (error) {
       response = catchError(error);
 
+      const { success, statusCode, statusText, responseBody } = response;
+
       console.log("Request: ", JSON.stringify({ url, method, data, headers }));
-      console.log("Response: ", JSON.stringify(response));
+      console.log("Response: ", JSON.stringify({ success, statusCode, statusText, responseBody }));
     }
 
     return response;
