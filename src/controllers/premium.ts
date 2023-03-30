@@ -43,11 +43,11 @@ export default class Premium {
 
     const body = {
       requestId,
+      operation: "SendSMS",
+      channel: "APIGW",
       requestParam: {
         data,
       },
-      operation: "SendSMS",
-      channel: "APIGW",
     };
 
     const headers = {
