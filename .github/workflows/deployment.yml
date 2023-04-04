@@ -6,7 +6,6 @@ on:
 
 env:
   IMAGE_NAME: ochom/sdp-sdk:latest
-  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
 
 jobs:
   build:
@@ -55,29 +54,28 @@ jobs:
       - name: "Use output"
         run: 'curl "${{ steps.deploy.outputs.url }}"'
 
-  # deploy-vm-chiriku:
-  #   needs: build
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+  deploy-vm-chiriku:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: AppleBoy SSH
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.STAGING_SSH_HOST }}
-  #         username: ${{ secrets.STAGING_SSH_USERNAME }}
-  #         password: ${{ secrets.STAGING_SSH_PASSWORD }}
-  #         envs: SERVICE_NAME
-  #         script: |
-  #           # deploy to staging
-  #           cd /var/www/staging
-  #           docker compose pull sdk
-  #           docker compose up -d --build --force-recreate sdk
+      - name: AppleBoy SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.STAGING_SSH_HOST }}
+          username: ${{ secrets.STAGING_SSH_USERNAME }}
+          password: ${{ secrets.STAGING_SSH_PASSWORD }}
+          script: |
+            # deploy to staging
+            cd /var/www/staging
+            docker compose pull sdk
+            docker compose up -d --build --force-recreate sdk
 
-  #           # deploy to production
-  #           cd /var/www/production
-  #           docker compose up -d --build --force-recreate sdk
+            # deploy to production
+            cd /var/www/production
+            docker compose up -d --build --force-recreate sdk
 
-  #           # clean up
-  #           docker image prune --all --force
+            # clean up
+            docker image prune --all --force
