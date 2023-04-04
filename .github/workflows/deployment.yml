@@ -28,56 +28,56 @@ jobs:
       - name: Docker Push
         run: docker push $IMAGE_NAME
 
-  # deploy-cloud-run-solami:
-  #   needs: build
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-
-  #     - id: auth
-  #       name: Authenticate GCP
-  #       uses: google-github-actions/auth@v1
-  #       with:
-  #         credentials_json: ${{ secrets.GCP_KEYS_JSON }}
-
-  #     - name: "Deploy to Cloud Run"
-  #       id: deploy
-  #       uses: google-github-actions/deploy-cloudrun@v1
-  #       with:
-  #         image: ${{ env.IMAGE_NAME }}
-  #         service: safaricom-sdp
-  #         region: europe-west2
-  #         env_vars: |
-  #           DEPLOYMENT_MODE=production
-  #           ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
-
-  #     - name: "Use output"
-  #       run: 'curl "${{ steps.deploy.outputs.url }}"'
-
-  deploy-vm-chiriku:
+  deploy-cloud-run-solami:
     needs: build
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: AppleBoy SSH
-        uses: appleboy/ssh-action@master
+      - id: auth
+        name: Authenticate GCP
+        uses: google-github-actions/auth@v1
         with:
-          host: ${{ secrets.STAGING_SSH_HOST }}
-          username: ${{ secrets.STAGING_SSH_USERNAME }}
-          password: ${{ secrets.STAGING_SSH_PASSWORD }}
-          envs: SERVICE_NAME
-          script: |
-            # deploy to staging
-            cd /var/www/staging
-            docker compose pull sdk
-            docker compose up -d --build --force-recreate sdk
+          credentials_json: ${{ secrets.GCP_KEYS_JSON }}
 
-            # deploy to production
-            cd /var/www/production
-            docker compose up -d --build --force-recreate sdk
+      - name: "Deploy to Cloud Run"
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          image: ${{ env.IMAGE_NAME }}
+          service: safaricom-sdp
+          region: europe-west2
+          env_vars: |
+            DEPLOYMENT_MODE=production
+            ACCESS_TOKEN=${{ secrets.PROD_ACCESS_TOKEN }}
 
-            # clean up
-            docker image prune --all --force
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
+
+  # deploy-vm-chiriku:
+  #   needs: build
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: AppleBoy SSH
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.STAGING_SSH_HOST }}
+  #         username: ${{ secrets.STAGING_SSH_USERNAME }}
+  #         password: ${{ secrets.STAGING_SSH_PASSWORD }}
+  #         envs: SERVICE_NAME
+  #         script: |
+  #           # deploy to staging
+  #           cd /var/www/staging
+  #           docker compose pull sdk
+  #           docker compose up -d --build --force-recreate sdk
+
+  #           # deploy to production
+  #           cd /var/www/production
+  #           docker compose up -d --build --force-recreate sdk
+
+  #           # clean up
+  #           docker image prune --all --force
